@@ -169,29 +169,29 @@ print("Saving models to", models_dir)
 print("Saving videos to", video_log_dir)
 
 # ANIMATION FUNCTION
-# def animate_policy(model, env, deterministic=False, log_times=False, print_vel=False, log=None, **kwargs):
-#     env.reset()
-#     def run():
-#         actions, _ = model.predict(env.states, deterministic=deterministic)
+def animate_policy(model, env, deterministic=False, log_times=False, print_vel=False, log=None, **kwargs):
+    env.reset()
+    def run():
+        actions, _ = model.predict(env.states, deterministic=deterministic)
         
-#         # print('actions=', actions)
-#         # print('states=', env.states)
-#         # print('')
+        # print('actions=', actions)
+        # print('states=', env.states)
+        # print('')
 
-#         states, rewards, dones, infos = env.step(actions)
-#         if log != None:
-#             log(states)
-#         if print_vel:
-#             # compute mean velocity
-#             vels = env.world_states[:,3:6]
-#             mean_vel = np.linalg.norm(vels, axis=1).mean()
-#             print(mean_vel)
-#         if log_times:
-#             if rewards[0] == 10:
-#                 print(env.step_counts[0]*env.dt)
+        states, rewards, dones, infos = env.step(actions)
+        if log != None:
+            log(states)
+        if print_vel:
+            # compute mean velocity
+            vels = env.world_states[:,3:6]
+            mean_vel = np.linalg.norm(vels, axis=1).mean()
+            print(mean_vel)
+        if log_times:
+            if rewards[0] == 10:
+                print(env.step_counts[0]*env.dt)
         
-#         return env.render()
-#     animation.view(run, gate_pos=env.gate_pos, gate_yaw=env.gate_yaw, **kwargs)
+        return env.render()
+    animation.view(run, gate_pos=env.gate_pos, gate_yaw=env.gate_yaw, **kwargs)
     
 # animate untrained policy (use this to set the recording camera position)
 # animate_policy(model, test_env)
@@ -223,13 +223,13 @@ def train(model, test_env, log_name, n=int(1e8)):
         model.save(models_dir + '/' + log_name + '/' + str(time_steps))
         print('Model saved at', models_dir + '/' + log_name + '/' + str(time_steps))
         # save policy animation
-        # animate_policy(
-        #     model,
-        #     test_env,
-        #     record_steps=1200,
-        #     record_file=video_log_dir + '/' + log_name + '/' + str(time_steps) + '.mp4',
-        #     show_window=False
-        # )
+        animate_policy(
+            model,
+            test_env,
+            record_steps=1200,
+            record_file=video_log_dir + '/' + log_name + '/' + str(time_steps) + '.mp4',
+            show_window=False
+        )
         
 
 # name = 'figure8_64_64_again!'
